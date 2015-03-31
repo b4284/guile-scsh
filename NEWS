@@ -1,0 +1,21 @@
+Changes between guile-scsh versions 2.0.0 and 2.0.1:
+
+* Fixed the "run" macro, by exporting open-string-source from the
+(scsh scsh) module (from Paul Emsley).
+
+Changes between 2.0.0 and earlier versions (such as the version
+distributed with Debian GNU/Linux circa 1998):
+
+* Based on a more recent version of scsh.
+
+* Use of the Guile module system.  While this is not exactly flawless,
+it allows using parts of guile-scsh without loading the whole thing.
+
+* Various additional features are supported, including Scheme-style
+regular expressions.
+
+* Some features of scsh are now implemented by the SRFI modules
+supplied with guile-core.
+
+* guile-scsh no longer depends on SLIB, but it now depends on
+guilerxspencer.

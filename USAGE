@@ -1,0 +1,273 @@
+The entire guile-scsh package can be loaded into a running Guile
+interpreter with:
+
+(load-from-path "scsh/init")
+
+Warning: this will take a while and will clobber various Guile
+definitions.
+
+When writing new software it's probably more useful to import parts of
+scsh individually using the Guile module system.  However note that
+macros may expand to code that requires additional modules.  e.g.,
+`run' is defined in (scsh syntax), but requires loading (scsh
+procobj), (scsh scsh), (scsh fdports) and (scsh syntax-helpers) to
+execute sucessfully.  This may be a deficiency of the Guile module
+system.
+
+One way to avoid clobbering definitions from libguile is to define a
+new module for the code that uses guile-scsh.  e.g.,
+
+(define-module (test)
+   :use-module (scsh syntax)
+   :use-module (scsh syntax-helpers)
+   :use-module (scsh procobj)
+   :use-module (scsh scsh)
+   :use-module (scsh fdports))
+(run (echo hello) (> out.log))
+
+In this case the definitions will only be clobbered within the module
+(test).
+
+The remainder of this file lists the modules and the exported symbols
+for each.  The modules don't necessarily correspond with scsh
+structures, since the Guile module system requires a correspondence
+between module names and files.  It was considered desirable to leave
+the scsh file layouts relatively intact, to simplify ungrading to
+newer versions of scsh.
+
+This list was generated with help from the make-module-list script.
+
+modules from guile-core
+=======================
+
+Apart from scsh-compatible facilities that are made available by
+modules in guile-core, there are a few that are currently available by
+default, including:
+
+(move->fdes release-port-handle dup->inport dup->outport dup fdes->inport fdes->outport port->fdes seek command-line port-revealed dup->fdes close flush-all-ports)
+
+Scsh-compatible facilities that can be obtained from guile-core modules:
+
+(ice-9 format)
+(format)
+
+(ice-9 receive)
+(receive)
+
+(srfi srfi-1)
+;; replaces:
+;; map map-in-order for-each member assoc iota list-index
+;; delete delete!
+(xcons list-tabulate circular-list proper-list? circular-list? dotted-list? null-list? not-pair? list= first second third fourth fifth sixth seventh eighth ninth tenth car+cdr take drop take-right drop-right take! drop-right! split-at split-at! last length+ concatenate concatenate! append-reverse append-reverse! zip unzip1 unzip2 unzip3 unzip4 unzip5 count fold fold-right pair-fold pair-fold-right reduce reduce-right unfold unfold-right append-map append-map! map! pair-for-each filter-map filter partition remove filter! partition! remove! find find-tail take-while take-while! drop-while span span! break break! any every delete-duplicates delete-duplicates! alist-cons alist-copy alist-delete alist-delete! lset<= lset= lset-adjoin lset-union lset-intersection lset-difference lset-xor lset-diff+intersection lset-union! lset-intersection! lset-difference! lset-xor! lset-diff+intersection! iota map map-in-order for-each list-index member delete delete! assoc)
+
+(srfi srfi-13)
+;; replaces:
+;; string-downcase string-downcase!
+;; string-upcase string-upcase! string-index
+;; string-fill! string-copy string->list
+(string-any string-every string-tabulate string->list reverse-list->string string-join string-copy substring/shared string-copy! string-take string-take-right string-drop string-drop-right string-pad string-pad-right string-trim string-trim-right string-trim-both string-fill! string-compare string-compare-ci string= string<> string< string> string<= string>= string-ci= string-ci<> string-ci< string-ci> string-ci<= string-ci>= string-hash string-hash-ci string-prefix-length string-prefix-length-ci string-suffix-length string-suffix-length-ci string-prefix? string-prefix-ci? string-suffix? string-suffix-ci? string-index string-index-right string-skip string-skip-right string-count string-contains string-contains-ci string-upcase string-upcase! string-downcase string-downcase! string-titlecase string-titlecase! string-reverse string-reverse! string-append/shared string-concatenate string-concatenate-reverse string-concatenate/shared string-concatenate-reverse/shared string-map string-map! string-fold string-fold-right string-unfold string-unfold-right string-for-each xsubstring string-xcopy! string-replace string-tokenize string-filter string-delete)
+
+(srfi srfi-14)
+(char-set? char-set= char-set<= char-set-hash char-set-cursor char-set-ref char-set-cursor-next end-of-char-set? char-set-fold char-set-unfold char-set-unfold! char-set-for-each char-set-map char-set-copy char-set list->char-set list->char-set! string->char-set string->char-set! char-set-filter char-set-filter! ucs-range->char-set ucs-range->char-set! ->char-set char-set-size char-set-count char-set->list char-set->string char-set-contains? char-set-every char-set-any char-set-adjoin char-set-adjoin! char-set-delete char-set-delete! char-set-complement char-set-union char-set-intersection char-set-difference char-set-xor char-set-diff+intersection char-set-complement! char-set-union! char-set-intersection! char-set-difference! char-set-xor! char-set-diff+intersection! char-set:lower-case char-set:upper-case char-set:title-case char-set:letter char-set:digit char-set:letter+digit char-set:graphic char-set:printing char-set:whitespace char-set:iso-control char-set:punctuation char-set:symbol char-set:hex-digit char-set:blank char-set:ascii char-set:empty char-set:full)
+
+modules from guile-scsh
+=======================
+
+(scsh alt-syntax)
+;; not compatible with (ice-9 syncase)
+(define-syntax syntax-rules)
+
+(scsh module-system)
+;; dummy definitions.
+(define-structure structure-ref)
+
+(scsh let-opt)
+;; not compatible with (ice-9 optargs).
+(let-optionals let-optionals* :optional)
+
+(scsh loophole)
+;; dummy definition.
+(loophole)
+
+(scsh signals)
+(syntax-error)
+
+(scsh fdports)
+(open/create+trunc open/write+append+create shell-open)
+
+(scsh syntax-helpers)
+(transcribe-process-form)
+
+(scsh bitwise)
+(arithmetic-shift bitwise-not bitwise-and bitwise-ior bitwise-xor)
+
+(scsh utilities)
+(del first? nth mapv mapv! vector-every? copy-vector initialize-vector vector-append vfold vfold-right check-arg conjoin disjoin negate compose call/cc deprecated-proc deposit-bit-field real->exact-integer)
+
+(scsh define-foreign-syntax)
+;; dummy definitions.
+(foreign-source define-foreign)
+
+(scsh ascii)
+(ascii->char char->ascii)
+
+(scsh features)
+(immutable? make-immutable!)
+
+(scsh primitives)
+(unspecific)
+
+(scsh reading)
+(reading-error)
+
+(scsh jar-defrecord)
+(define-record-type define-accessor define-accessors)
+
+(scsh char-p)
+(char-letter? char-digit? char-letter+digit? char-graphic? char-printing? char-blank? char-iso-control? char-punctuation? char-symbol? char-hex-digit? char-ascii? char-alphanumeric? char-control?)
+
+(scsh cset-obsolete)
+(char-set-members chars->char-set ascii-range->char-set predicate->char-set char-set-every? char-set-any? char-set-invert char-set-invert! reduce-char-set char-set:alphabetic char-set:numeric char-set:alphanumeric char-set:control)
+
+(scsh defrec)
+(define-record-discloser define-record)
+
+(scsh errno)
+;; defines symbols such as errno/perm.
+()
+
+(scsh rw)
+(bogus-substring-spec? read-string/partial read-string! read-string write-string write-string/partial read-string!/partial)
+
+(scsh rx re-low)
+(match:start match:end match:substring regexp-match:start regexp-match:end regexp-match:string new-cre cre-search cre-search? cre:string cre:tvec)
+
+(scsh rx cond-package)
+(define-simple-syntax when unless ? switchq switch prog0 land* %switch %switchq)
+
+(scsh rx let-match)
+(let-match if-match match-cond)
+
+(scsh rx re)
+;; replaces regexp?
+(%make-re-dsm %make-re-dsm/posix re-dsm? re-dsm:body re-dsm:pre-dsm re-dsm:tsm re-dsm:posix set-re-dsm:posix re-dsm:post-dsm re-dsm open-dsm %make-re-seq %make-re-seq/posix re-seq? re-seq:elts re-seq:tsm re-seq:posix set-re-seq:posix make-re-seq re-seq %make-re-choice %make-re-choice/posix re-choice? re-choice:elts re-choice:tsm re-choice:posix set-re-choice:posix make-re-choice re-choice %make-re-repeat %make-re-repeat/posix re-repeat? re-repeat:from re-repeat:to re-repeat:body re-repeat:tsm re-repeat:posix set-re-repeat:posix make-re-repeat re-repeat reduce-repeat %make-re-submatch %make-re-submatch/posix re-submatch? re-submatch:body re-submatch:pre-dsm re-submatch:tsm re-submatch:posix set-re-submatch:posix re-submatch:post-dsm make-re-submatch re-submatch re-string:chars re-string:posix set-re-string:posix re-string re-string? make-re-string make-re-string/posix re-trivial re-trivial? re-char-set:cset re-char-set:posix set-re-char-set:posix re-char-set? re-char-set make-re-char-set make-re-char-set/posix re-empty re-empty? re-bos make-re-bos re-bos? re-eos make-re-eos re-eos? re-bol make-re-bol re-bol? re-eol make-re-eol re-eol? re-bow make-re-bow re-bow? re-eow make-re-eow re-eow? re-any re-any? re-nonl regexp? re-tsm re-word flush-submatches map/changed uncase uncase-char-set uncase-string char-set-full? char-set-empty? static-char-class?)
+
+(scsh rx spencer)
+(posix-string->regexp)
+
+(scsh rx simp)
+(simplify-regexp)
+
+(scsh rx posixstr)
+(regexp->posix-string)
+
+(scsh rx re-high)
+(compile-regexp regexp-search regexp-search?)
+
+(scsh rx oldfuns)
+(->regexp)
+
+(scsh rx re-subst)
+;; these replace definitions from (ice-9 regex).
+(regexp-substitute regexp-substitute/global)
+
+(scsh rx re-fold)
+(regexp-fold regexp-fold-right regexp-for-each)
+
+(scsh rx re-syntax)
+;; rx macro generates code that requires at least:
+;; (scsh rx re) (srfi srfi-14)
+(sre-form? expand-rx if-sre-form rx)
+
+(scsh rx parse)
+(static-regexp? sre->regexp parse-sre parse-sres regexp->scheme char-set->in-pair)
+
+(scsh rx rx-lib)
+(coerce-dynamic-regexp spec->char-set)
+
+(scsh rdelim)
+;; similar to (ice-9 rdelim):
+;; incompatible: read-line, read-delimited, read-delimited!, %read-delimited!
+;; additions: read-paragraph, skip-char-set
+;; omissions: write-line, read-line!
+(read-line read-paragraph read-delimited read-delimited! skip-char-set %read-delimited!)
+
+(scsh here)
+;; exports nothing, but installs a read macro for #<
+()
+
+(scsh scsh-version)
+(scsh-major-version scsh-minor-version scsh-version-string)
+
+(scsh weak)
+(make-weak-pointer weak-pointer-ref weak-pointer?)
+
+(scsh population)
+(make-population add-to-population! population-reduce population->list walk-population)
+
+(scsh sighandlers)
+;; also exports signal/alrm, interrupt/alrm etc.
+(signal->interrupt with-enabled-interrupts enabled-interrupts set-enabled-interrupts set-interrupt-handler interrupt-handler)
+
+(scsh procobj)
+(proc:pid proc? pid->proc autoreap-policy reap-zombies new-child-proc wait/poll wait/stopped-children wait wait-any wait-process-group reaped-procs)
+
+(scsh syscalls)
+;; replaces pipe, sleep
+(%exec %%fork cwd user-gid user-effective-gid set-gid user-supplementary-gids user-uid user-effective-uid set-uid user-login-name pid parent-pid set-process-group become-session-leader set-umask process-times cpu-ticks/sec set-file-mode set-file-owner set-file-group read-symlink delete-directory set-file-times file-info file-info:type file-info:gid file-info:inode file-info:atime file-info:mtime file-info:ctime file-info:mode file-info:nlinks file-info:uid file-info:size sync-file sync-file-system seek/set seek/delta seek/end tell pipe signal-process signal-process-group pause-until-interrupt itimer user-info user-info:name user-info:uid user-info:gid user-info:home-dir user-info:shell name->user-info uid->user-info ->uid ->username %homedir group-info group-info:name group-info:gid group-info:members ->gid ->groupname directory-files env->alist alist->env fdes-flags set-fdes-flags fdes-status set-fdes-status open/read open/write open/read+write open/non-blocking open/append open/exclusive open/create open/truncate open/no-control-tty open/access-mask fdflags/close-on-exec sleep sleep-until system-name)
+
+(scsh fname)
+(file-name-as-directory file-name-directory? file-name-non-directory? directory-as-file-name ensure-file-name-is-nondirectory file-name-absolute? file-name-directory file-name-nondirectory split-file-name path-list->file-name file-name-extension file-name-sans-extension replace-extension parse-file-name expand-file-name simplify-file-name resolve-tilde-file-name resolve-file-name absolute-file-name home-dir home-file)
+
+(scsh fluid)
+;; replaces make-fluid
+(make-fluid set-fluid! fluid let-fluid)
+
+(scsh stringcoll)
+(make-string-collector collect-string! clear-string-collector! string-collector->string)
+
+(scsh scsh-condition)
+(errno-error with-errno-handler* with-errno-handler)
+
+(scsh syntax)
+;; define-simple-syntax generates code that requires
+;; (scsh alt-syntax).
+;; other macros generate code that requires
+;; (scsh scsh), (scsh procobj), (scsh syntax-helpers).
+(define-simple-syntax exec-epf & run || && run/collecting run/port+proc run/port run/strings run/file run/string run/sexp run/sexps)
+
+(scsh glob)
+(glob glob-quote maybe-directory-files)
+
+(scsh fileinfo)
+;; replaces file-exists?
+(file-not-readable? file-not-writable? file-not-executable? file-readable? file-writable? file-executable? file-not-exists? file-exists? file-type file-group file-inode file-last-access file-last-mod file-last-status-change file-mode file-nlinks file-owner file-size file-directory? file-fifo? file-regular? file-socket? file-special? file-symlink?)
+
+(scsh filesys)
+;; replaces rename-file.
+(delete-filesys-object create-directory create-fifo create-hard-link create-symlink rename-file)
+
+(scsh time)
+(make-date date? date:seconds date:minute date:hour date:month-day date:month date:year date:tz-name date:tz-secs date:summer? date:week-day date:year-day set-date:seconds set-date:minute set-date:hour set-date:month-day set-date:month set-date:year set-date:tz-name set-date:tz-secs set-date:summer? set-date:week-day set-date:year-day modify-date:seconds modify-date:minute modify-date:hour modify-date:month-day modify-date:month modify-date:year modify-date:tz-name modify-date:tz-secs modify-date:summer? modify-date:week-day modify-date:year-day time+ticks ticks/sec time date date->string format-date)
+
+(scsh newports)
+;; replaces open-file, open-input-file, open-output-file
+(fdport? set-port-buffering bufpol/block bufpol/line bufpol/none open-file open-input-file open-output-file call/fdes close-after with-current-input-port* with-current-output-port* with-error-output-port* with-current-error-port* with-current-input-port with-current-output-port with-error-output-port with-current-error-port set-current-input-port! set-current-output-port! set-current-error-port!)
+
+(scsh fr)
+(field-splitter infix-splitter suffix-splitter sloppy-suffix-splitter record-reader field-reader)
+
+(scsh awk)
+;; the awk macro generates code that requires:
+;; (scsh rx re-syntax) (scsh rx re) (scsh rx re-high)
+(awk)
+
+(scsh netconst)
+;; also exports symbols such as address-family/unspecified.
+(options/boolean options/value options/linger shutdown/receives shutdown/sends shutdown/sends+receives)
+
+(scsh network)
+(socket-connect bind-listen-accept-loop socket? socket:family socket:inport socket:outport socket-address? socket-address:address socket-address:family internet-address->socket-address socket-address->internet-address create-socket close-socket bind-socket connect-socket listen-socket accept-connection socket-remote-address socket-local-address shutdown-socket create-socket-pair receive-message receive-message! receive-message/partial receive-message!/partial send-message send-message/partial socket-option set-socket-option host-info host-info? host-info:name host-info:aliases host-info:addresses network-info network-info? network-info:name network-info:aliases network-info:net service-info service-info? service-info:name service-info:aliases service-info:port service-info:protocol protocol-info protocol-info? protocol-info:name protocol-info:aliases protocol-info:number host-to-net-16 net-to-host-16 host-to-net-32 net-to-host-32)
+
+(scsh scsh)
+(call-terminally fork/pipe %fork/pipe tail-pipe tail-pipe+ alist-update alist-compress add-before add-after with-env* with-total-env* with-cwd* with-umask* create-temp-file temp-file-channel run/collecting* run/port+proc* run/port* run/file* run/string* run/strings* run/sexp* run/sexps* port->string port->string-list port->sexp-list port->list port-fold char-filter string-filter y-or-n? stdio->stdports with-stdio-ports* stdports->stdio command-line-arguments arg* arg argv home-directory exec-path-list suspend exec/env exec-path/env exec-path exec fork %fork stringify with-cwd with-umask with-env with-total-env with-stdio-ports)

@@ -1,0 +1,58 @@
+Bugs
+====
+
+The use of Guile modules for individual components of scsh can cause
+problems with macros that refer to unexported or imported bindings.
+e.g., see the "run" comment in the USAGE file.
+
+scsh features not implemented
+=============================
+
+char->char partial maps library (lib/ccp*)
+flock interface (flock*)
+Job control (jcontrol*)
+NDBM interface (ndbm*)
+ODBC interface (odbc/*)
+pty interface (pty.scm)
+tty interface (tty*)
+Scheme 48 string ports.
+
+set-command-line-args!
+select!
+open/async open/fsync open/shared-lock open/exclusive-lock
+enabled-interrupts interrupt-set %set-unix-signal-handler
+set-enabled-interrupts %unix-signal-handler
+with-enabled-interrupts*
+
+Bugs in scsh fixed in guile-scsh
+================================
+
+delete-filesys-object can't delete directories in linux 2.4.
+
+receive-message! usually returns only the number of bytes instead of
+the two values documented in the scsh-manual: the number of bytes and
+the remote address.  It does return the two values when EOF is seen.
+
+receive-message usually fails since it tries to receive multiple
+values from "receive-message!"  See above.
+
+filter-weak-ptr-list in procobj.scm seems to have a typo in its last
+line: list instead of lis.  This was causing problems for guile-scsh but
+doesn't seem to matter in scsh.  Hmm.
+
+network-info doesn't work if its argument is a socket address.
+
+Other incompatibilities with scsh
+=================================
+
+The Guile module system is not compatible with the Scheme48 system
+used in scsh.
+
+Sockets are created unbuffered in Guile, but buffered in scsh.
+
+with-enabled-interrupts disables all interrupts in guile-scsh.
+
+Guile I/O procedures haven't been changed throughout to accept file
+descriptors in place of ports, e.g., display, write, read-char.
+
+The close-on-exec flag is not set on unrevealed ports.

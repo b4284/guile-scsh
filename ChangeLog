@@ -1,0 +1,990 @@
+2003-10-19  Gary Houston  <ghouston@arglist.com>
+
+	* configure.in: version 2.0.1.
+	* USAGE: added open-string-source.
+	* scsh.scm: export open-string-source (from Paul Emsley).
+
+2002-10-27  Gary Houston  <ghouston@arglist.com>
+
+	* USAGE: fix (scsh newports) exports list.
+
+2002-10-26  Gary Houston  <ghouston@arglist.com>
+
+	* README, NEWS: updated for 2.0.0 version.
+	* INCOMPAT: Scheme 48 strings ports not implemented.
+	* newports.scm: export with-error-output-port* and
+	with-error-output-port.
+	* syntax.scm: export run/collecting, not run-collecting.
+	* USAGE: listed scsh-compatible facilities available by default
+	in guile-core (probably not complete).
+	autogen.sh: include warning and force options.
+
+	* configure.in: move Makefile argument from AC_OUTPUT to
+	AC_CONFIG_FILES.
+	version -> 2.0.0.
+
+2001-08-08  Gary Houston  <ghouston@arglist.com>
+
+	* rdelim.scm (%read-delimited!): export a modified version that's
+	more scsh-compatible.
+
+	* network.scm: (host-to-net-16, net-to-host-16, host-to-net-32,
+	net-to-host-32): defined and exported.
+	* USAGE, INCOMPAT, README: updated.
+
+2001-08-06  Gary Houston  <ghouston@arglist.com>
+
+	* syscalls.scm (itimer): define and export.  it's an interface
+	to "alarm", not "setitimer".  weird.
+	(open/access-mask, define and export (from scsh fdflags.scm).
+	* newports.scm (open-file, open-input-file, open-output-file):
+	define and export.  clobbers Guile primitives.
+	use modules (scsh syscalls), (scsh let-opt), (scsh utilities),
+	(scsh bitwise).
+	* init.scm: don't duplicate comments already in USAGE.
+	* USAGE, INCOMPAT: updated.
+
+2001-08-04  Gary Houston  <ghouston@arglist.com>
+
+	* rx/spencer.scm, rx/simp.scm, rx/rx-lib.scm, rx/re.scm,
+	rx/posixstr.scm, rx/parse.scm, rx/let-match.scm, rdelim.scm,
+	network.scm: upgraded with scsh 0.5.2 -> 0.5.3 changes.
+
+	* rdelim.scm (read-delimited): don't use obsolete char-set-members.
+	don't use module (scsh cset-obsolete).  define guile-read-delimted!
+	before read-delimited! is redefined by export.
+
+	* rx/spencer.scm, rx/simp.scm, rx/rx-lib.scm, rx/re.scm, rx/parse.scm,
+	posixstr.scm, fr.scm: don't use module (scsh cset-obsolete).
+
+	* scsh.scm: use module (ice-9 format).  adjust home-directory and
+	exec-path-list.
+
+	* filesys.scm (rename-file), fluid.scm (make-fluid),
+	rdelim.scm (read-delimited, read-delimited!),
+	syscalls.scm (pipe, sleep): use module-ref to get bindings from
+	guile-core.
+
+	* README, USAGE, INCOMPAT: updated: now guile-scsh is based on
+	scsh 0.5.3.
+
+	* utilities.scm (delete, filter, first, fold, fold-right, any, every):
+	don't export, to avoid replacing (srfi srfi-1) definitions.
+
+	* awk.scm, defrec.scm, glob.scm, scsh.scm, rx/parse.scm,
+	procobj.scm, utilities.scm: rx/re-subst.scm, rx/re-syntax.scm,
+	rx/re.scm, rx/rx-lib.scm: use (srfi srfi-1) for procs removed from
+	utilities.scm.
+
+	* awk.scm, defrec.scm, glob.scm, rx/parse.scm, rx/re-subst.scm,
+	rx/re-syntax.scm, rx/rx-lib.scm: don't use (scsh utilities).
+
+2001-08-03  Gary Houston  <ghouston@arglist.com>
+
+	* glob.scm, fr.scm, fileinfo.scm, let-opt.scm:
+	upgraded with scsh 0.5.2 -> scsh 0.5.3 changes.
+
+	* fr.scm, glob.scm: don't use module (scsh cset-obsolete).
+	* let-opt.scm: don't export really-let-optionals*, it's gone.
+	commented out the last part the file to avoid 2nd let-optionals*
+	definition, which doesn't work in Guile. use module (ice-9 receive).
+
+	* alt-syntax.scm: re-export syntax-error: a kludge to allow
+	define-syntax macro expansion to use it.
+
+2001-08-01  Gary Houston  <ghouston@arglist.com>
+
+	* char-p.scm: new file, for new module (scsh char-p).
+	(char-alphanumeric? char-graphic? char-printing? char-blank?
+	char-control? char-punctuation? char-hex-digit? char-ascii?): moved
+	from char-set.scm.
+	(char-letter? char-digit? char-letter+digit? char-iso-control?
+	char-symbol?): new from scsh-0.5.3.
+	* utilities.scm (deprecated-proc): redefined using Guile's deprecation
+	mechanism.
+
+	* cset-obsolete.scm: new file from scsh-0.5.3.  defines module
+	(scsh cset-obsolete).   Add reduce-char-set from char-set.scm.
+
+	* char-set.scm: deleted.  (scsh char-set) is replaced by
+	(srfi srfi-14), (scsh char-p) and (scsh cset-obsolete).
+
+	* rdelim.scm (skip-char-set): don't use char-set:s.
+
+	fr.scm, glob.scm, here.scm, rdelim.scm,
+	rx/parse.scm, rx/posixstr, rx/re.scm, rx/rx-lib.scm, rx/simp.scm,
+	rx/spencer.scm: use (srfi srfi-14) and/or (scsh cset-obsolete)
+	instead of (scsh char-set).
+
+	* init.scm, USAGE, Makefile.am, make-module-list: updated.
+
+	* rdelim.scm: use module (scsh let-opt).
+
+2001-07-30  Gary Houston  <ghouston@arglist.com>
+
+	* char-set.scm (char:newline, char:tab, char:page, char:return,
+	char:space, char:vtab): don't export, since they are not part of
+	the interface in scsh 0.5.3.
+	(char-alphabetic?, char-numeric?, char-lower-case?, char-upper-case?,
+	char-whitespace?): removed, since all R5RS and in guile-core.
+
+2001-07-22  Thien-Thi Nguyen  <ttn@revel.glug.org>
+
+	* rw.scm (generic-write-string): Fix typo in `writer' call.
+
+2001-07-22  Gary Houston  <ghouston@arglist.com>
+
+	* let-opt.scm (really-let-optionals*): export: a kludge to make
+	let-optionals* work.
+
+2001-07-07  Gary Houston  <ghouston@arglist.com>
+
+	* scsh.scm (run/port, run/file, run/string, run/strings, run/sexp,
+	run/sexps): don't export, they are defined in (scsh syntax).
+	* rw.scm, rdelim.scm: use re-export instead of export for
+	re-exporting from guile-core modules.
+	* char-set.scm: remove char-set- prefix from string-iter, since
+	it's no longer defined elsewhere.
+	* fname.scm, rx/posixstr.scm, rx/re-subst.scm, rx/re.scm:
+	use (srfi srfi-13) instead of (lib string-lib).
+	* syscalls.scm, utilities.scm, fluid.scm, filesys.scm, rdelim.scm,
+	rx/re.scm:
+	add deprecated blocks to create bindings for features that
+	override guile-core.
+	USAGE: updated.
+
+2001-07-06  Gary Houston  <ghouston@arglist.com>
+
+	* lib/string-lib.scm: removed.
+	* init.scm: load (srfi srfi-13) instead of (scsh lib string-lib).
+	* Makefile.am: references to lib/string-lib.scm removed.
+	* USAGE: updated.
+
+2001-07-03  Gary Houston  <ghouston@arglist.com>
+
+	* lib/list-lib.scm: removed.
+	* Makefile.am (pkgdata_DATA): lib/list-lib.scm removed.
+	* init.scm: load (srfi srfi-1) instead of (scsh lib list-lib).
+	* USAGE: updated for module changes.
+
+2001-06-27  Gary Houston  <ghouston@arglist.com>
+
+	* configure.in: converted for autoconf 2.50: remove AC_INIT arg,
+	add AC_CONFIG_SRCDIR.
+	(GUILE_SCSH_DIR): removed.  don't install to directory
+	reported by guile-config, but use the datadir which is
+	derived from prefix by default.
+	don't test for guile-config.
+	add rx/Makefile.
+	* Makefile.am (pkgdatadir): derive it from datadir.
+	add rx to SUBDIRS.  remove mkinstalldirs rx hack from
+	install-exec-local.
+	(EXTRA_DIST): fix the RHS.
+	(pkgdata_DATA): remove rx subdir files.
+	* rx/Makefile.am: new file.
+	* README: updated.
+
+2001-06-12  Gary Houston  <ghouston@arglist.com>
+
+	* network.scm (socket-connect): export socket-connect.
+
+2001-06-06  Gary Houston  <ghouston@arglist.com>
+
+	* scsh-condition.scm (with-errno-handler*): bug fix, errors were
+	not reported correctly.  use (ice-9 stack-catch) to improve
+	error messages.
+	* filesys.scm (create-file-thing): use (ice-9 stack-catch) to improve
+	error messages.
+	(delete-filesys-object): handle errno/isdir, not errno/perm when
+	deleting a file.  otherwise directories can't be deleted: seems like
+	a bug in scsh.
+
+2001-06-04  Gary Houston  <ghouston@arglist.com>
+
+	* rw.scm (generic-write-string/partial, write-string/partial):
+	removed.  write-string/partial is now in (ice-9 rw).
+
+2001-05-29  Gary Houston  <ghouston@arglist.com>
+
+	* rx/re-subst.scm: export regexp-substitute/global.  otherwise
+	the version from (ice-9 regex) is used, but can't handle SREs.
+	thanks to Paul Emsley for pointing out that
+	regexp-substitute/global didn't work.
+
+	* rx/re-low.scm: export regexp-match:start, regexp-match:end,
+	regexp-match:string since they are used in re-subst.scm.  This
+	fixes regexp-substitute.
+
+2001-05-28  Gary Houston  <ghouston@arglist.com>
+
+	* filesys.scm (create-directory, create-fifo, create-hard-link,
+	create-symlink, create-file-thing): fixed.  for some reason
+	these had never been ported to guile.  thanks to Paul Emsley
+	for pointing out that create-directory didn't work.
+
+2001-05-25  Gary Houston  <ghouston@arglist.com>
+
+	* syscalls.scm (directory-files): initialise result with '(), not ().
+	Thanks to Paul Emsley.
+
+	* netconst.scm (options/linger etc.) use '() not () for recent CVS
+	guile.  Thanks to Paul Emsley.
+
+2001-04-29  Gary Houston  <ghouston@arglist.com>
+
+	* rw.scm: use module (ice-9 rw).
+
+2001-01-25  Gary Houston  <ghouston@arglist.com>
+
+	* rw.scm: export read-string!/partial.
+
+2001-01-24  Gary Houston  <ghouston@arglist.com>
+
+	* rdelim.scm: use module (ice-9 rdelim).
+	export %read-delimited!.
+        * awk.scm, scsh.scm: use module (scsh rdelim).
+
+2001-01-06  Gary Houston  <ghouston@arglist.com>
+
+	* rw.scm (generic-read-string!/partial, read-string!/partial):
+	removed, since this version wasn't correct but it's now in
+	guile-core.
+	* README: "upgraded" the guile-core dependency to tomorrows
+	CVS version.
+
+2001-01-01  Gary Houston  <ghouston@arglist.com>
+
+	* lib/string-lib.scm (string-unfold-right, join-strings,
+	string-take-right, string-drop-right): 	don't export, since they are
+	not defined.
+
+2000-12-06  Gary Houston  <ghouston@arglist.com>
+
+	* init.scm: load (scsh fdports)
+	* scsh.scm (stringify): export.
+	* Makefile.am (pkgdata_DATA): add fdports.scm.
+	* fdports.scm: new file from scsh 0.5.2, with definitions already
+	provided by libguile removed.
+	* syntax-helpers.scm: export transcribe-process-form.
+	use module (scsh utilities) for check-arg.
+	* syntax.scm (scsh): don't use (scsh scsh) module, there are
+	mutual dependency problems.  code generated by macros in
+	syntax.scm will still need (scsh scsh).
+
+2000-12-04  Gary Houston  <ghouston@arglist.com>
+
+	* scsh.scm: define module (scsh scsh).
+	(command-line-arguments): define directly here instead of in init.scm.
+	(init-scsh-vars): call here instead of in init.scm.
+	(exit): removed, use Guile definition.
+
+	* syscalls.scm (define-errno-syscall): don't export
+	* network.scm: define module (scsh network).
+	(define-errno-syscall): copied from syscalls.scm.
+	* netconst.scm: define module (scsh netconst).
+	(maybe-define, maybe-define-so): export the generated definitions.
+	* fr.scm: define module (scsh fr).
+	* awk.scm: define module (scsh awk).
+	* newports.scm: define module (scsh newports).
+	* time.scm: define module (scsh time).
+	* filesys.scm: define module (scsh filesys).
+	rename-file: use guile primitive rename-file instead of
+	%rename-file.
+	* filemtch.scm: file removed.  it's deprecated/obsolete/broken.
+	* glob.scm: define module (scsh glob).
+	* fileinfo.scm: define module (scsh fileinfo).
+	* syntax.scm: define module (scsh syntax).
+	* init.scm: load new modules.
+	* Makefile.am (pkgdata_DATA): filemtch.scm removed.
+
+2000-12-02  Gary Houston  <ghouston@arglist.com>
+
+	* receive.scm: removed.
+	* Makefile.am (pkgdata_DATA): remove receive.scm.
+	some *.scm, init.scm: use (ice-9 receive) module, not (scsh receive).
+	(pkgdata_DATA): add jar-defrecord.scm, define-foreign-syntax.scm.
+
+2000-11-29  Gary Houston  <ghouston@arglist.com>
+
+	* Makefile.am (install-exec-local): a temporary kludge to create rx
+	and lib	dirs before installing files there.
+
+2000-11-27  Gary Houston  <ghouston@arglist.com>
+
+	* Removed auto-generated files from the CVS repository.
+
+	* configure.in: don't use AM_MAINTAINER_MODE.  set version to 0.0.
+	check for guile-config.
+
+	* Makefile.am (scsh_DATA): updated the file list.  rename to
+	subpkgdata_DATA.
+	(EXTRA_DIST): add autogen.sh.
+	(subpkgdatadir): new variable, set via configure.
+
+	* autogen.sh: new file.
+
+	* USAGE, README: updated.
+
+	* lib/list-lib.scm (for-each): define
+
+	* lib/list-lib.scm: define module (scsh lib list-lib).
+	comment out procedures which are already compatibly defined in
+	Guile (cons*, make-list, list-copy, last-pair, append!,
+	reverse!)
+	(for-each): define, since it's supposed to be here but was missing.
+
+	* lib/ccp.scm: file removed.  doesn't seem to be required by
+	anything else or documented.
+
+	* scsh-condition.scm: define module (scsh scsh-condition).
+
+	* condition.scm: file removed.
+
+	* stringcoll.scm: define module (scsh stringcoll).
+
+	* enumconst.scm: file deleted: defines a couple of macros which
+	are not used or exported.
+
+	* fluid.scm: define module (scsh fluid).
+	* sighandlers.scm: define module (scsh sighandlers).
+	(maybe-define-signal): export each symbol that's
+	defined.
+	* weak.scm: define module (scsh weak).
+	* population.scm: define module (scsh population).
+	* procobj.scm: define module (scsh procobj).
+	* syscalls.scm: define module (scsh syscalls).
+	(close-fdes, seek): removed: now guile primitives.
+	* fname.scm: define module (scsh fname).
+	* scsh-version.scm: define module (scsh scsh-version).
+	* init.scm: load new modules.
+
+2000-10-29  Gary Houston  <ghouston@arglist.com>
+
+	* rx/rx-lib.scm: define module (scsh rx rx-lib).
+	* rx/parse.scm: define module (scsh rx parse).
+	* rx/re-syntax.scm: define module (scsh rx re-syntax)
+	* rx/re-fold.scm: define module (scsh rx re-fold).
+	* errno.scm: define module (scsh errno).
+	* rw.scm: define module (scsh rw).
+	* rx/re-subst.scm: define module (scsh rx re-subst).
+	* rx/oldfuns.scm: define module (scsh rx oldfuns).
+	* init.scm: load new modules.
+
+2000-10-28  Gary Houston  <ghouston@arglist.com>
+
+	* rx/re-syntax.scm (expand-rx): take rx and if-sre-form definitions
+	from init.scm.
+
+2000-10-27  Gary Houston  <ghouston@arglist.com>
+
+	* rx/re-high.scm: define module (scsh rx re-high).
+	* rx/spencer.scm: define module (scsh rx spencer).
+	* lib/string-lib.scm: define module (scsh lib string-lib).
+	don't redefine string-null? or substring.
+	* rx/simp.scm: define module (scsh rx simp).
+	* rx/posixstr.scm: define module (scsh rx posixstr).
+	* rx/let-match.scm: define module (scsh rx let-match).
+	* init.scm: don't load rxspencer module.  do it in rx/re-low.scm.
+	load new modules.
+
+2000-10-25  Gary Houston  <ghouston@arglist.com>
+
+	* rx/cond-package.scm: define module (scsh rx cond-package).
+	* rx/re.scm: define module (scsh rx re)
+	* rx/re-low.scm: define module (scsh rx re-low).
+	* defrec.scm: define module: (scsh defrec).
+	* init.scm: load new modules.
+
+2000-10-22  Gary Houston  <ghouston@arglist.com>
+
+	* USAGE: new file, partly generated from make-module-list output.
+	* make-module-list: new script: create the module exports list
+	for the USAGE file.
+	* Makefile.am (EXTRA_DIST): add USAGE, make-module-list.
+
+	* rdelim.scm: define module (scsh rdelim).
+	* init.scm: load new module.
+
+2000-10-16  Gary Houston  <ghouston@arglist.com>
+
+	* jar-defrecord.scm: define module (scsh jar-defrecord).
+
+	* char-set.scm: define module (scsh char-set).
+
+	* here.scm: define module (scsh here).
+
+	* reading.scm: new file. take reading-error from init.scm.
+	define module (scsh reading).
+
+	* primitives.scm: new file. take unspecific from init.scm.
+	define module (scsh primitives).
+
+	* features.scm: new file.  take immutable?, make-immutable! dummy
+	defs from init.scm.  define module (scsh features).
+
+	* ascii.scm: new file.  take ascii->char, char->ascii from init.scm.
+	define module (scsh ascii).
+
+	* define-foreign-syntax.scm: new file.  take dummy definitions for
+	foreign-source and define-foreign from init.scm.  define
+	(scsh define-foreign-syntax) module.
+
+	* init.scm: use new modules.
+
+2000-10-15  Gary Houston  <ghouston@arglist.com>
+
+	* bitwise.scm: define module (scsh bitwise).
+	* utilities.scm: define module (scsh utilities).
+	(reverse!): removed, since guile primitive is compatible.
+
+	* syntax-helpers.scm: define module (scsh syntax-helpers).
+	* signals.scm: new file.  move syntax-error here from alt-syntax.scm.
+	define module (scsh signals).
+	* module-system.scm: new file.  define module (scsh module-system).
+	dummy definitions for define-structure, structure-ref moved from
+	init.scm.
+	* loophole.scm: new file from scsh-0.5.2: alt/loophole.scm.
+	define module (scsh loopholes).  used by check-arg in utilities.scm.
+
+	* defrec.scm (define-record-discloser): moved from init.scm.
+	* let-opt.scm: define module (scsh let-opt).
+	define module (scsh receive).
+	* alt-syntax.scm: define module (scsh alt-syntax).
+	* init.scm: use these modules.
+
+2000-10-14  Gary Houston  <ghouston@arglist.com>
+
+	* remove dependency on slib:
+
+	* syscalls.scm (directory-files): don't (require 'sort): sort! is
+	defined by Guile.
+
+	* init.scm: use (ice-9 format) module instead of format from slib.
+	don't (require) 'format or 'values.  don't load slib module.
+
+2000-10-12  Gary Houston  <ghouston@arglist.com>
+
+	* rx/re-low.scm (compile-posix-re->c-struct cre-search, cre-search?):
+	use (regex spencer).
+
+	* init.scm: use the guilerxspencer module, distributed
+	separately, instead of the regex routines in guile-core.
+	Scsh takes advantage of the support for embedded ASCII nuls
+	in Spencer's library.
+
+2000-09-14  Gary Houston  <ghouston@arglist.com>
+
+	* lib/string-lib.scm (string->list): fix a known scsh bug:
+	string->list didn't work at all.
+
+2000-09-07  Gary Houston  <ghouston@arglist.com>
+
+	* alt-syntax.scm (define-syntax): quote ,name when consing it to
+	form.
+
+2000-09-04  Gary Houston  <ghouston@arglist.com>
+
+	* README: updated.  guile-scsh is now based on scsh 0.5.2.
+	mention some bugs in the INCOMPAT file: more work is needed.
+
+2000-08-30  Gary Houston  <ghouston@arglist.com>
+
+	* char-set.scm (string-iter): renamed to char-set-string-iter,
+	so it doesn't conflict with lib/string-lib.scm:string-iter.
+	should be fixed by module system instead.
+	only called by char-set-invert! and char-set-intersection! in
+	char-set.scm.
+
+2000-08-28  Gary Houston  <ghouston@arglist.com>
+
+	* rx/oldfuns.scm: don't redefine Guile primitives.
+
+2000-08-23  Gary Houston  <ghouston@arglist.com>
+
+	* compile-posix-re->c-struct, cre-search, cre-search?: rewritten
+	using Guile regexp primitives.  not particularly optimal nor
+	necessarily complete.
+
+2000-08-21  Gary Houston  <ghouston@arglist.com>
+
+	* rx/re-low.scm (clean-up-cres): make this a no-op.
+
+2000-08-20  Gary Houston  <ghouston@arglist.com>
+
+	* sighandlers.scm (maybe-define-signal), errno.scm (maybe-define-eno):
+	use string-downcase, not string-downcase!.
+
+	* init.scm (structure-ref): defined bogusly: scheme48 module system
+	is not supported.
+
+	* init: load new files.
+	* lib: ccp.scm, list-lib.scm, string-lib.scm: new files from
+	scsh-0.5.2.
+
+	* lib: new directory.
+
+	* init.scm (rx, if-sre-form): defined, from scsh old-packages.scm.
+
+	* init.scm: load new files.
+
+	* rx: new subdirectory.
+
+	* jar-defrecord.scm, re-low.scm, re-high.scm,
+	 cond-package.scm let-match.scm oldfuns.scm parse.scm posixstr.scm,
+	 re-fold.scm re-subst.scm re-syntax.scm rx-lib.scm simp.scm,
+	 spencer.scm: new files from scsh-0.5.2.
+
+2000-08-10  Gary Houston  <ghouston@arglist.com>
+
+	* init.scm: don't define index, rrindex.
+
+	* updates from scsh-0.5.2: COPYING, awk.scm, char-set.scm,
+	defrec.scm, enumconst.scm, fileinfo.scm, filemtch.scm,
+	filesys.scm, fname.scm, fr.scm, glob.scm, here.scm, network.scm,
+	procobj.scm, rdelim.scm, re.scm, rw.scm, scsh-condition.scm,
+	scsh-version.scm, scsh.scm, sighandlers.scm, stringcoll.scm,
+	syntax-helpers.scm, syntax.scm, syscalls.scm, time.scm,
+	utilities.scm
+
+1998-04-05  Mikael Djurfeldt  <mdj@nada.kth.se>
+
+	* init.scm (rindex): Bugfix: start is an optional argument.
+	(Thanks to David Lutterkort.)
+
+Sat Oct 11 03:30:45 1997  Gary Houston  <ghouston@actrix.gen.nz>
+
+	* init.scm, Makefile.am: add scsh-version.scm.
+	* scsh-version.scm (scsh-major-version): new file from scsh.
+
+Fri Oct 10 22:48:52 1997  Gary Houston  <ghouston@actrix.gen.nz>
+
+	* init.scm (reading-error): defined.
+
+Thu Oct  9 02:32:41 1997  Gary Houston  <ghouston@actrix.gen.nz>
+
+	* here.scm (#\<): don't read-char from port.  use read-hash-extend.
+	(make-immutable!, immutable, unspecific): defined.
+
+	* Makefile.am, init.scm: add here.scm
+	* here.scm: new file from scsh.
+
+Wed Oct  8 03:50:13 1997  Gary Houston  <ghouston@actrix.gen.nz>
+
+	* Makefile.am: add awk.scm, ekko.scm, enumconst.scm
+	* init.scm: load awk.scm, enumconst.scm
+	* enumconst.scm: new file from scsh.
+	* ekko.scm: new file from scsh.  change interpreter to guile.
+	* awk.scm: new file from scsh.  define awk at the end.
+	* init.scm (batch-mode?, set-batch-mode?!): deleted, now in
+	boot-9.scm.
+
+Sat Aug 30 19:31:05 1997  Gary Houston  <ghouston@actrix.gen.nz>
+
+	* filemtch.scm (split-pat): bug fix: would fail if pattern
+	contained a slash.
+	(file-match): use catch, not with-handler.
+	* init.scm (rindex): bug fix: scsh's start argument is
+ 	string-rindex's end.
+	* init.scm, Makefile.am: add new files.
+	* glob.scm, filemtch.scm, filesys.scm: new files from scsh 0.5.1.
+	(constant-glob? pattern): bug fix: last "if" had unused third
+	branch.
+	* syscalls.scm (open-fdes): removed, primitive in Guile.
+	(close-fdes): defined.
+	* scsh.scm (call/temp-file, create-temp-file, *temp-file-template*,
+	temp-file-iterate, temp-file-channel, open-string-source): defined.
+	(run/collecting*, ..., string-filter): defined.
+	(suspend): defined.
+	(y-or-n?, *y-or-n-eof-count*): uncommented, since used in
+ 	filesys.scm.
+	* init.scm, Makefile.am: add fluid.scm, stringcoll.scm
+ 	and alt-syntax.scm.
+	* syntax.scm: new file from scsh 0.5.1.
+	* alt-syntax.scm: renamed from syntax.scm.
+	* fluid.scm: new file, implements Scheme48 fluid variables.
+	* stringcoll.scm: new file from scsh 0.5.1.
+
+Sat Aug 23 19:17:19 1997  Gary Houston  <ghouston@actrix.gen.nz>
+
+	* scsh.scm (exec-path-search, exec/env, exec-path/env, exec-path,
+	exec, fork, %fork, really-fork): defined.
+	(fork/pipe, %fork/pipe, really-fork/pipe, %fork/pipe+, fork/pipe+,
+	really-fork/pipe+, tail-pipe, tail-pipe+, pipe*): defined.
+	* init.scm (set-batch-mode?!, batch-mode?): dummy definitions.
+	* Makefile.am, init.scm: add bitwise.scm.
+	* bitwise.scm: new file from scsh-0.5.1/alt/.
+	(biwise-not, bitwise-and, bitwise-or, bitwise-ior, bitwise-xor):
+	moved from init.scm.
+	(count-bits): shift -1, not 1.  Commented out, seems unused.
+	* scsh-condition.scm (errno-error, with-errno-handler): modified
+	to use Guile primitives.
+	Don't define syscall-error condition type.
+	* syscalls.scm (errno-msg): defined.
+	* errno.scm: include all errnos from cpp_err_symbols.in (libguile).
+
+Sat Aug 16 08:10:24 1997  Gary Houston  <ghouston@actrix.gen.nz>
+
+	* init.scm: load fileinfo.scm, condition.scm, scsh-condition.scm.
+	* Makefile.am: add fileinfo.scm, condition.scm, scsh-condition.scm.
+	* scsh-condition.scm: new file from scsh-0.5.1.
+	* condition.scm: new file from scsh-0.5.1/rts/.
+	* fileinfo.scm: new file from scsh-0.5.1.
+	* init.scm: initialize command-line-arguments.
+	* scsh.scm (arg*, arg, argv): defined.
+	(stringify): defined.
+	* syscalls.scm (define-errno-syscall): moved from init.scm.
+	(%exec, %%fork): defined.
+	(user-gid, user-effective-gid, set-gid, user-supplementary-gids,
+	user-uid, user-effective-uid, set-uid, user-login-name, pid,
+	parent-pid, process-group, set-process-group, become-session-leader):
+	defined.
+	(set-file-mode, set-file-owner, set-file-group, read-symlink,
+	delete-directory, set-file-times): defined.
+	(file-info, sync-file, sync-file-system, seek): defined.
+	(process-times, cpu-ticks/sec): defined.
+	(%filter-C-strings!): update regexp usage.
+	(directory-files): defined.
+	(fdes-flags, set-fdes-flags, fdes-status, set-fdes-status,
+	open/read etc.): defined.
+
+Sat Aug  9 08:34:09 1997  Gary Houston  <ghouston@actrix.gen.nz>
+
+	* syscalls.scm: signals: signal-process, signal-process-group,
+	pause-until-interrupt.
+	miscellaneous: sleep, sleep-until, system-name.
+	* Makefile.am (scsh_DATA): add weak.scm, population.scm, procobj.scm,
+	sighandlers.scm.
+	* init.scm: load weak.scm, population.scm, procobj.scm,
+	sighandlers.scm.
+	* sighandlers.scm: new file from scsh-0.5.1, partially reimplemented
+	using Guile's sigaction.
+	* procobj.scm: new file from scsh-0.5.1, modified for Guile.
+	* population.scm: new file from scsh-0.5.1/scheme48.
+	* weak.scm: new file, implements scheme48-style weak pointers.
+
+Tue Jul 29 01:39:40 1997  Gary Houston  <ghouston@actrix.gen.nz>
+
+	* Makefile.am (scsh_DATA): add newports.scm.
+
+	* scsh.scm (exit): defined here instead of in syscalls.scm.
+
+	* init.scm: load newports.scm.
+
+	* newports.scm: new file, excerpts from scsh's version modified
+	for Guile.
+
+	* scsh.scm: include stdio/stdport sync procedures.
+
+Sat Jul 26 06:22:36 1997  Gary Houston  <ghouston@actrix.gen.nz>
+
+	* init.scm: load syntax-helpers.scm.
+
+	* Makefile.am (scsh_DATA): add syntax-helpers.scm.
+	* syntax-helpers.scm: new file from scsh 0.5.1.
+	(name?): make it the same as symbol?
+
+	* scsh.scm: define call-terminally.
+	define with-env*, with-total-env*, with-cwd*, with-umask* and
+	the macro versions.
+
+	* syscalls.scm: redefine exit, pipe (ugh).
+	Define cwd, set-umask.
+	Include environment stuff, gives only alist->env and env->alist.
+
+Fri Jul 18 07:31:03 1997  Gary Houston  <ghouston@actrix.gen.nz>
+
+	* init.scm: load re.scm.
+	* re.scm: delete everything except regexp-num-submatches.
+
+Wed Jul 16 14:40:40 1997  Jim Blandy  <jimb@floss.red-bean.com>
+
+	* Makefile.am: Install SCSH files in $(datadir)/guile, not in the
+	version-specific directory.  I think SCSH shouldn't be tied to a
+	specific version of Guile.
+	* Makefile.in: Regenerated.
+
+Sun Jun 15 06:06:58 1997  Gary Houston  <ghouston@actrix.gen.nz>
+
+	* configure.in: change the version to 1.2a so it will install
+	in the right place (maybe).
+
+	* README: now it's a port of scsh 0.5.1.
+
+	* init.scm: don't include re.scm until Guile's interface is stable.
+
+	* match:start, match:end, match:substring updated from scsh 0.5.1.
+	regexp-substitute, regexp-substitute/global, regexp-num-submatches:
+	new from scsh 0.5.1.
+
+	* syscalls.scm (%filter-C-strings!): moved from re.scm, following
+	scsh 0.5.1.
+
+	* utilities.scm: new version from scsh 0.5.1, adds string-replace!,
+	substring-replace!, string-reduce.
+
+	* time.scm: minor changes for scsh 0.4.4 -> 0.5.1
+
+	* rw.scm: delete y-or-n? and *y-or-n-eof-count* which have moved
+	in scsh 0.5.1 (to scsh.scm, but we don't need them).
+
+Tue May 13 11:59:28 1997  Jim Blandy  <jimb@floss.cyclic.com>
+
+	* Makefile.in, aclocal.m4, configure: Regenerated using automake
+	1.1p.
+
+	Lie to automake in a different way, to get it to install things in
+	the right place.
+	* configure.in (AM_INIT_AUTOMAKE): Call the package guile-scsh,
+	not guile; this determines the name of the disty.
+	* Makefile.am (scshdir): Renamed from subpkgdatadir.  Use
+	$(datadir)/guile instead of $(pkgdatadir), since the latter's
+	value uses the package name given to AM_INIT_AUTOMAKE.
+	(scsh_DATA): Renamed from subpkgdata_DATA.
+	(EXTRA_DIST): Fix reference.
+	* Makefile.in, configure: Regenerated.
+
+	Make SCSH into a separate distribution.
+	* README: Renamed from README.PORT.
+	* configure.in: Use AM_INIT_AUTOMAKE, not AM_INIT_GUILE_MODULE.
+	* Makefile.am: Don't use @module@ to decide where to install
+	things.  No need to mention README.PORT; automake will grab it
+	automatically now, since it's named README.  Don't try to
+	distribute the PLUGIN stuff.
+	* INSTALL: New file; stock text.
+	* install-sh, missing, mkinstalldirs: New files, used by
+	automake-generated makefiles.
+	* configure, Makefile.in, aclocal.m4: Regenerated.
+
+Sat Apr 26 03:16:18 1997  Gary Houston  <ghouston@actrix.gen.nz>
+
+	* time.scm (format-date): Uncommented and rewritten.
+
+Fri Apr 11 08:15:40 1997  Gary Houston  <ghouston@actrix.gen.nz>
+
+	* rdelim.scm: uncomment skip-char-set.
+
+	* Makefile.am (subpkgdata_DATA): add fr.scm.
+	* init.scm: load fr.scm.
+	* fr.scm: copied from scsh.
+
+Mon Apr  7 08:23:03 1997  Gary Houston  <ghouston@actrix.gen.nz>
+
+	* time.scm (date, time): fixed and uncommented.
+
+Sat Apr  5 06:44:32 1997  Gary Houston  <ghouston@actrix.gen.nz>
+
+	* time.scm (ticks/sec): define, always 1000000.
+	(time+ticks): use gettimeofday.
+
+	* Makefile.am (subpkgdata_DATA): add time.scm.
+	* init.scm: load time.scm.  require 'format from slib.
+
+Tue Apr  1 23:19:08 1997  Gary Houston  <ghouston@actrix.gen.nz>
+
+	* time.scm: copied from scsh and modified to use Guile primitives.
+
+Mon Mar 31 02:24:25 1997  Gary Houston  <ghouston@actrix.gen.nz>
+
+	* rdelim.scm: uncomment read-paragraph.
+
+	* Makefile.am (subpkgdata_DATA): add re.scm.
+	* init.scm: load re.scm.
+	* re.scm: copied from scsh and modified to use Guile regular
+	expressions.
+
+Tue Mar 25 04:28:51 1997  Gary Houston  <ghouston@actrix.gen.nz>
+
+	* syscalls.scm (name->user-info, uid->user-info): defined, needed
+	by fname.scm.
+
+	* Makefile.am (subpkgdata_DATA): add fname.scm, syscalls.scm, scsh.scm.
+
+	* init.scm: load fname.scm, scsh.scm and call init-scsh-vars.
+
+	* scsh.scm: new file, list manipulation and global variable init
+	parts from scsh.
+
+	* fname.scm: copied from scsh.
+
+	* init.scm (wait/poll, wait/stopped-children): defined, all that's
+	needed from waitcodes.scm.
+
+Wed Mar 19 04:55:51 1997  Gary Houston  <ghouston@actrix.gen.nz>
+
+	* syscalls.scm: define user-info record and procedures user-info,
+	->uid, ->username, %homedir.
+	define group-info record and procedures group-info, ->gid, ->groupname.
+
+Mon Mar 17 19:40:45 1997  Gary Houston  <ghouston@actrix.gen.nz>
+
+	* init.scm: load syscalls.scm.
+	* syscalls.scm: new file.  Will not include all of the contents
+	of scsh's syscalls.scm.
+
+Tue Mar 11 04:09:55 1997  Gary Houston  <ghouston@actrix.gen.nz>
+
+	* (let-opt.scm, utilities.scm): revert to scsh's versions, no longer
+	renaming :optional.
+	(rw.scm, network.scm): change optional back to :optional.
+
+Mon Feb 24 21:47:59 1997  Mikael Djurfeldt  <mdj@mdj.nada.kth.se>
+
+	* configure.in: Added AM_MAINTAINER_MODE
+
+Fri Jan 31 04:36:42 1997  Gary Houston  <ghouston@actrix.gen.nz>
+
+	* init.scm: use use-modules instead of define-module to access slib.
+
+Sat Jan 25 01:03:03 1997  Gary Houston  <ghouston@actrix.gen.nz>
+
+	* init.scm: load char-set.scm and rdelim.scm.
+	* Makefile.am (subpkgdata_DATA): add char-set.scm and rdelim.scm.
+
+	* rdelim.scm: new file from scsh.  Some procedures have been
+ 	implemented in libguile/ice-9 (based on the scsh interfaces), so
+ 	the versions here just modify them to use scsh char-sets and
+ 	multiple values.
+
+	* rw.scm (generic-read-string!/partial, generic-read-string!,
+	generic-write-string/partial, generic-write-string: adapt
+	to change in uniform-array-read/write arguments.
+
+	* network.scm (generic-receive-message!,
+	generic-receive-message!/partial): adapt to changes in recvfrom!
+	primitive.
+
+	* char-set.scm: new file from scsh.
+
+Mon Jan 20 01:12:38 1997  Gary Houston  <ghouston@actrix.gen.nz>
+
+	* Makefile.am, Makefile.in, PLUGIN/OPT, README.PORT, configure.in,
+	configure, aclocal.m4: new files.
+
+	* network.scm (generic-receive-message!/partial): catch sytem-error
+	and check for errno/wouldblock or errno/again.
+
+Sat Jan 18 00:52:14 1997  Gary Houston  <ghouston@actrix.gen.nz>
+
+	* init.scm (index, rindex): replace versions in utilities.scm with
+	primitives.
+	load errno.scm.
+
+	* rw.scm: globally replace :optional with optional.
+	comment out y-or-n? and *y-or-n-eof-count*.
+	(read-string!/partial, generic-read-string!/partial,
+	generic-read-string!, read-string!, generic-write-string/partial,
+	write-string/partial, generic-write-string, write-string):
+	use guile primitives.
+
+	* netconst.scm: undefine maybe-define and maybe-define-so after use.
+	* errno.scm: new file.
+
+Wed Jan  8 02:32:56 1997  Gary Houston  <ghouston@actrix.gen.nz>
+
+	* init.scm (ascii->char, char->ascii) defined.
+
+	* netconst.scm (maybe-define-so): new macro.  use it to define
+	socket option constants.
+	remove a few SO_ types which don't appear in scsh's netconst.scm.
+	define variables options/boolean etc.
+
+	* network.scm: socket-address->list: new procedure.
+	(generic-send-message, generic-send-message/partial, socket-option,
+	set-socket-option, address->host-info, name->host-info,
+	address->network-info, name->network-info, port->service-info,
+	name->service-info, number->protocol-info, name->protocol-info):
+	use guile primitives.
+	(send-message, send-message/partial): minor modifications.
+	comment out C-long-vec->Scheme, integer->string, string->integer.
+
+Mon Jan  6 05:00:19 1997  Gary Houston  <ghouston@actrix.gen.nz>
+
+	* network.scm (generic-receive-message!): use guile primitives.
+	(receive-message!): minor change.
+	(receive-message): use the scsh definition.
+	(generic-receive-mesage/partial, receive-message/partial,
+	receive-message!/partial): similar.
+
+	* init.scm: load rw.scm
+
+	* rw.scm: copied from scsh.
+
+Sat Jan  4 02:48:02 1997  Gary Houston  <ghouston@actrix.gen.nz>
+
+	* init.scm (define-structure): simple substitute.
+
+Sun Dec 29 08:12:10 1996  Gary Houston  <ghouston@actrix.gen.nz>
+
+	* let-opt.scm: new copy from scsh.  replace :optional with optional.
+
+Fri Dec 27 06:06:50 1996  Gary Houston  <ghouston@actrix.gen.nz>
+
+	* init.scm: remove integer->string.
+
+Sat Dec 21 01:49:23 1996  Gary Houston  <ghouston@actrix.gen.nz>
+
+	* network.scm: (close-socket, bind-socket, create-socket,
+	connect-socket, listen-socket, accept-connection,
+	socket-remote-address, socket-local-address, shutdown-socket,
+	create-socket-pair, receive-message: use Guile network primitives.
+	(socket-address->list family address): new procedure.
+	(make-addr): comment out.
+	(address-vector->socket-address): new procedure.
+
+Thu Dec 19 05:29:30 1996  Gary Houston  <ghouston@actrix.gen.nz>
+
+	* network.scm (internet-address->socket-address): store the
+	address/port in a pair instead of packing them into a string.
+	(socket-address->internet-address): equal and opposite change.
+	(throughout): replace :optional with optional.
+	(socket->port sock): replaces socket->fdes.
+
+	* init.scm: define integer->string, load netconst.scm.
+	define define-foreign, define-errno-syscall,
+	define-record-dicloser (do nothing.)
+	load network.scm.
+
+Wed Dec 18 22:44:02 1996  Gary Houston  <ghouston@actrix.gen.nz>
+
+	* netconst.scm: new file, defines network constants.
+
+Tue Dec 17 06:24:39 1996  Gary Houston  <ghouston@actrix.gen.nz>
+
+	* network.scm: copied from scsh
+
+	* init.scm: define foreign-source, does nothing.
+
+	* init.scm: load syntax.scm instead of slib's macro-by-example.
+	load defrec.scm.
+
+	* defrec.scm: copied from scsh.
+
+	* syntax.scm: copied from scsh.
+	Redefine define-syntax and define syntax-error.  By some miracle
+	it seems to work.
+
+Mon Dec 16 05:53:43 1996  Gary Houston  <ghouston@actrix.gen.nz>
+
+	* receive.scm: copied from scsh.
+
+Fri Dec 13 04:53:50 1996  Gary Houston  <ghouston@actrix.gen.nz>
+
+	* utilities.scm (compose): uncomment.
+	* init.scm (values): get call-with-values from slib.
+
+Wed Dec 11 22:15:18 1996  Gary Houston  <ghouston@actrix.gen.nz>
+
+	* init.scm: define bitwise-not, bitwise-and, bitwise-ior, bitwise-xor.
+	use slib's macro-by-example for define-syntax for now.
+	load let-opt.scm and utilities.scm.
+
+	* utilities.scm: replace usage of :optional with optional.
+	comment out compose, haven't decided what to do with call-with-values.
+
+	* let-opt.scm: comment out everything but the `optional'
+ 	macro, renamed from :optional.
+
+	* COPYING, let-opt.scm, utilities.scm: from scsh 0.4.4.
+	* ChangeLog, INCOMPAT, init.scm: new files.
+	* new directory.
+

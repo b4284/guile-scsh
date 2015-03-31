@@ -1,0 +1,124 @@
+#!/usr/bin/guile -s
+!#
+
+;; create a list of module exports for the documentation.
+
+(define files 
+  (map (lambda (sym)
+	 (string-append (symbol->string sym) ".scm"))
+;; list of files to be scanned.
+       '(alt-syntax
+	 module-system
+	 let-opt
+	 loophole
+	 signals
+	 fdports
+	 syntax-helpers
+	 bitwise
+	 utilities
+	 define-foreign-syntax
+	 ascii
+	 features
+	 primitives
+	 reading
+	 jar-defrecord
+	 cset-obsolete
+	 char-p
+	 defrec
+	 errno
+	 rw
+	 rx/re-low
+	 rx/cond-package
+	 rx/let-match
+	 rx/re
+	 rx/spencer
+	 rx/simp
+	 rx/posixstr
+	 rx/re-high
+	 rx/oldfuns
+	 rx/re-subst
+	 rx/re-fold
+	 rx/re-syntax
+	 rx/parse
+	 rx/rx-lib
+	 rdelim
+	 here
+	 scsh-version
+	 weak
+	 population
+	 sighandlers
+	 procobj
+	 syscalls
+	 fname
+	 fluid
+	 stringcoll
+	 scsh-condition
+	 syntax
+	 glob
+	 fileinfo
+	 filesys
+	 time
+	 newports
+	 fr
+	 awk
+	 netconst
+	 network
+	 scsh)))
+
+;; if expr is a define-module form, return the name of the module
+;; e.g., '(scsh alt-syntax).
+;; otherwise return #f.
+(define (module-name expr)
+  (if (and (pair? expr) (eq? (car expr) 'define-module))
+      (cadr expr)
+      #f))
+
+;; read expressions from a port until a define-module form is found.
+;; return the name of the module.
+(define (get-module-name port)
+  (let ((obj (read port)))
+    (if (eof-object? obj)
+	(error "EOF when looking for module name")
+	(or (module-name obj)
+	    (get-module-name port)))))
+  
+;; read expressions from a port until EOF, appending any symbols
+;; that appear in top level export or export-syntax forms onto
+;; the result list.  return the result list.
+(define (get-exports port result)
+  (let ((obj (read port)))
+    (if (eof-object? obj)
+	result
+	(if (and (pair? obj)
+		 (or (eq? (car obj) 'export)
+		     (eq? (car obj) 'export-syntax)))
+	    (get-exports port (append result (cdr obj)))
+	    (get-exports port result)))))
+
+;; helper for do-file.	
+(define (do-port port)
+  (cons (get-module-name port) (get-exports port '())))
+  
+;; return a pair containing module name and exported symbols for a given
+;; file.
+(define (get-module-exports file)
+  (let* ((port (open-input-file file))
+	 (result (do-port port)))
+    (close-port port)
+    result))
+
+;; format a pair returned by get-module-exports for the output file.
+(define (format-module-exports exports)
+  (write (car exports))
+  (newline)
+  (write (cdr exports))
+  (newline)
+  (newline))
+
+(for-each format-module-exports
+	  (map get-module-exports
+	       files))
+
+;; Local Variables:
+;; mode:scheme
+;; End:
